@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student IT Guide | Learn Technology</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+
+    <style>
+        /* 
+         * =========================================
+         * CSS VARIABLES (PINK & PURPLE THEME)
+         * =========================================
+         */
+        :root {
+            /* Background Colors - Soft Pink & Purple Gradient */
+            --bg-body: linear-gradient(135deg, #fff0f5 0%, #f3e5f5 100%); /* Lavender Blush to Thistle */
+            --bg-white: #ffffff;
+            --bg-accent: #fce4ec;       /* Light Pink tint */
+            
+            /* Primary Colors */
+            --primary: #8e44ad;         /* Deep Purple */
+            --secondary: #ff6b81;       /* Soft Pink */
+            --accent-gradient: linear-gradient(135deg, #8e44ad 0%, #ff6b81 100%);
+            
+            /* Text Colors */
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            
+            /* Layout & Spacing */
+            --nav-height: 70px;
+            --container-width: 1100px;
+            --radius: 12px;
+            --shadow: 0 5px 20px rgba(142, 68, 173, 0.1); 
+            --shadow-hover: 0 15px 30px rgba(142, 68, 173, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-body);
+            background-attachment: fixed; /* Keeps gradient fixed while scrolling */
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        /* 
+         * =========================================
+         * PRELOADER (DOTS ANIMATION)
+         * =========================================
+         */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-white);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeOutLoader 7s forwards;
+        }
+
+        .dots-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            background-color: var(--secondary); /* Pink Dot */
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        /* Stagger the animation for each dot */
+        .dot:nth-child(1) { animation-delay: -0.32s; background-color: var(--primary); }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(3) { animation-delay: 0s; background-color: var(--primary); }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .loading-text {
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeOutLoader {
+            0% { opacity: 1; visibility: visible; }
+            85% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+
+        /* 
+         * =========================================
+         * NAVBAR
+         * =========================================
+         */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(142, 68, 173, 0.1);
+        }
+
+        .nav-container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 4px rgba(142, 68, 173, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-btn {
+            padding: 10px 25px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(142, 68, 173, 0.4);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+        }
+
+        /* 
+         * =========================================
+         * HERO SECTION
+         * =========================================
+         */
+        .hero {
+            padding: 100px 20px 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        /* 
+         * =========================================
+         * COURSES SECTION
+         * =========================================
+         */
+        .section-padding {
+            padding: 60px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.3rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(142, 68, 173, 0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 3px 15px rgba(142, 68, 173, 0.08);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--secondary);
+        }
+
+        /* FIXED: Image container with proper aspect ratio */
+        .card-visual {
+            width: 100%;
+            height: 200px; /* Increased height */
+            background-color: #f3f0f5; 
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures full visibility */
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-visual img {
+            transform: scale(1.08);
+        }
+
+        /* Card content section */
+        .card-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-details {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.87rem;
+            color: var(--text-gray);
+            border-left: 4px solid var(--secondary);
+            line-height: 1.7;
+        }
+
+        .card-details strong {
+            color: var(--primary);
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* 
+         * =========================================
+         * ABOUT SECTION (UPDATED)
+         * =========================================
+         */
+        .about-container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .about-text p {
+            margin-bottom: 18px;
+            color: var(--text-gray);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .about-image-col {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .about-image-col img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(142, 68, 173, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image-col img:hover {
+            transform: scale(1.03);
+        }
+
+        /* 
+         * =========================================
+         * MOTIVATION SECTION
+         * =========================================
+         */
+        .motivation {
+            background: var(--accent-gradient);
+            color: white;
+            text-align: center;
+            padding: 90px 20px;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .motivation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .motivation h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+
+        .motivation p {
+            font-size: 1.25rem;
+            max-width: 650px;
+            margin: 0 auto 35px auto;
+            opacity: 0.95;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .white-btn {
+            padding: 16px 45px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .white-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            color: var(--secondary);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        /* 
+         * =========================================
+         * FOOTER
+         * =========================================
+         */
+        footer {
+            background: #2d3436;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .footer-tagline {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #dfe6e9;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-links a {
+            color: #b2bec3;
+            margin: 0 15px;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            color: #636e72;
+            font-size: 0.85rem;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.4rem; }
+            .about-container { padding: 30px; }
+            .section-header h2 { font-size: 1.9rem; }
+            .motivation h2 { font-size: 2.2rem; }
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .card-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="dots-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loading-text">Unlocking new possibilities...</div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">EduTech.</div>
+            <nav class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#courses" class="nav-link">Courses</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#motivation" class="nav-link">Motivation</a>
+            </nav>
+            <a href="#courses" class="nav-btn">Start Learning</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <h1>Start Your Journey in <br><span>Modern Technology</span></h1>
+        <p>No experience needed. Start from zero and grow step by step. Simple guides for students who want to grow.</p>
+        <a href="#courses" class="nav-btn" style="padding: 12px 30px;">Explore Courses</a>
+    </section>
+
+    <!-- COURSES SECTION -->
+    <section id="courses" class="section-padding">
+        <div class="section-header">
+            <h2>What Do You Want To Learn?</h2>
+            <p>Pick a path and discover what you can achieve.</p>
+        </div>
+
+        <div class="grid-container">
+            
+            <!-- Web Dev -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/web dev.avif" alt="Web Development">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Web Development</div>
+                    <div class="card-desc">Learn to build websites from scratch and understand how the internet works. Bring your ideas to life by creating functional web pages.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> HTML, CSS, JS.<br>
+                        <strong>Best for:</strong> Creative thinkers and aspiring web developers
+                    </div>
+                </div>
+            </article>
+
+            <!-- Frontend -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/froontdev.jpg" alt="Frontend Development">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Frontend Development</div>
+                    <div class="card-desc">Create engaging interfaces and seamless experiences. Design buttons, menus, and animations that look great and work smoothly.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> React, Design, UI/UX.<br>
+                        <strong>Best for:</strong> Creative designers and interface enthusiasts
+                    </div>
+                </div>
+            </article>
+
+            <!-- Backend -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/,,backend.jpg" alt="Backend Development">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Backend Development</div>
+                    <div class="card-desc">Build the server-side of applications where the logic and data live — the brain behind every website.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Node.js, Python, Databases.<br>
+                        <strong>Best for:</strong> Logical problem solvers and backend enthusiasts
+                    </div>
+                </div>
+            </article>
+
+            <!-- Full Stack -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/fulstack.avif" alt="Full Stack Dev">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Full Stack Dev</div>
+                    <div class="card-desc">Learn to build complete applications from frontend to backend, mastering both sides of development.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Frontend + Backend.<br>
+                        <strong>Best for:</strong> Aspiring startup founders and full-stack developers
+                    </div>
+                </div>
+            </article>
+
+            <!-- Mobile App -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/app dev - Copy.avif" alt="Mobile App Dev">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Mobile App Dev</div>
+                    <div class="card-desc">Design and build apps for smartphones, then publish them on the App Store or Google Play..</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Swift, Kotlin, Flutter.<br>
+                        <strong>Best for:</strong> Mobile app enthusiasts and creators
+                    </div>
+                </div>
+            </article>
+
+            <!-- AI -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/ai - Copy.avif" alt="Artificial Intelligence">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Artificial Intelligence</div>
+                    <div class="card-desc">Build intelligent systems that can think, learn, and make decisions like humans.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Logic, Algorithms, Python.<br>
+                        <strong>Best for:</strong> Aspiring innovators and tech pioneers
+                    </div>
+                </div>
+            </article>
+
+            <!-- Machine Learning -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/machine learning.jfif" alt="Machine Learning">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Machine Learning</div>
+                    <div class="card-desc">Harness data to make predictions and teach software to improve from experience.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Data Analysis, Math Models.<br>
+                        <strong>Best for:</strong>Math and data enthusiasts
+                    </div>
+                </div>
+            </article>
+
+            <!-- Cyber Security -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/cybersecurity.png" alt="Cyber Security">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Cyber Security</div>
+                    <div class="card-desc">Become a digital protector. Learn how to prevent cyber attacks and safeguard critical data.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Networking, Ethical Hacking.<br>
+                        <strong>Best for:</strong> Guardians of the web and security enthusiasts
+                    </div>
+                </div>
+            </article>
+
+            <!-- Cloud -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/cloud computing.avif" alt="Cloud Computing">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Cloud Computing</div>
+                    <div class="card-desc">Learn to store, manage, and scale data over the internet instead of relying on local systems.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> AWS, Azure, Google Cloud.<br>
+                        <strong>Best for:</strong> Aspiring system architects and tech organizers
+                    </div>
+                </div>
+            </article>
+
+            <!-- DevOps -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/devops.webp" alt="DevOps">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">DevOps</div>
+                    <div class="card-desc">Streamline collaboration between developers and operations to help teams work faster and more efficiently.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> CI/CD, Docker, Automation.<br>
+                        <strong>Best for:</strong> Future team leaders and problem-solvers
+                    </div>
+                </div>
+            </article>
+
+            <!-- UI/UX -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/ui ux.avif" alt="UI UX Design">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">UI / UX Design</div>
+                    <div class="card-desc">Design intuitive and engaging experiences. Ensure users enjoy your apps and can easily find what they need.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Figma, Wireframing, User Research<br>
+                        <strong>Best for:</strong> Creative thinkers and planners
+                    </div>
+                </div>
+            </article>
+
+            <!-- Blockchain -->
+            <article class="card">
+                <div class="card-visual">
+                    <img src="./images/block chain.jfif" alt="Blockchain">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Blockchain</div>
+                    <div class="card-desc">Build secure systems that cannot be altered — the technology powering cryptocurrencies and decentralized apps.</div>
+                    <div class="card-details">
+                        <strong>You will learn:</strong> Smart Contracts, Solidity.<br>
+                        <strong>Best for:</strong> FinTech enthusiasts
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION (UPDATED) -->
+    <section id="about" class="section-padding" style="background-color: transparent;">
+        <div class="section-header">
+            <h2>Why Learn Tech?</h2>
+            <p>Unlocking the Power of Digital Skills.</p>
+        </div>
+        <div class="about-container">
+            <div class="about-text">
+                <h2>Empower Your Future</h2>
+                <p>Technology is one of the fastest-growing fields in the world. It opens doors to remote opportunities, creative freedom, and solving real-world problems. It’s not just about learning to code — it’s about learning how to think.</p>
+                <p>When you learn technology, you become a creator. You’re no longer just a user of apps; you become the person who builds them. We provide the roadmap, you bring the passion. Let’s build something amazing together.</p>
+            </div>
+            <!-- Image Placeholder replacing the old card -->
+            <div class="about-image-col">
+                <img src="./images/technology.webp" alt="Empower Future">
+            </div>
+        </div>
+    </section>
+
+    <!-- MOTIVATION SECTION -->
+    <section id="motivation" class="motivation">
+        <h2>Stay Consistent</h2>
+        <p>Learning technology is a journey, not a race. While challenges are part of the process, every problem you solve brings you closer to the future you are creating.</p>
+        <a href="#courses" class="white-btn">Explore Your Path</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <span class="footer-tagline">
+                Created with ♥ to support students everywhere.
+            </span>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#courses">Courses</a>
+                <a href="#about">About Us</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 EduTech Guide. Simple Learning to Empower Every Mind.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html
